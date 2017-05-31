@@ -20,14 +20,28 @@
 
 <-- To deploy a single instance -->
 
+--- On Slack ---
+Create Slack app and get values for authtication.js file
+
+--- On Server ---
 Clone from github
 
 run NPM install
 
 Edit authentication.js file with values from Slack
+	BaseURL/authenticate
 
+--- On Slack ---
 Configure all /slash commands listed above
+
+Configure redirect URIs:
+	BaseURL
+	BaseURL/authenticate
 
 Add an incoming webhook	
 
-Authenticate using the authenticate method above
+--- Through web browser---
+
+Authenticate using the authenticate method on the single instance
+
+BaseURL/authenticate
