@@ -11,15 +11,28 @@ Request.get('https://slack.com/oauth/authorize?client_id='+authTokens.client_id+
 	if(error)console.log(error);
 });
 App.get('/', function(req, res) {
-	authResp = res.json;
-	if(authResp.query.code !== ''){
-		var authCode = authResp.query.code;
+	console.log(req.query);
+	console.log(req.query.code);
+	if(req.query.code){
+		var authCode = req.query.code;
 		Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode, function(error, response, body){
 			if(error)console.log(error);
-			if(body)console.log(body);
+			if(response)console.log(response);
+			if(body){
+	  		FS.writeFile(Path.join(__dirname,'index.html'), body, function(err) {
+				    if(err) {
+				        return console.log(err);
+				    }
+
+				    console.log("The file was saved!");
+				}); 
+	  		}
 		});
-	}
-	res.sendFile(Path.join(__dirname,'README.md'));
+	} 
+
+	res.sendFile(Path.join(__dirname,'index.html'));
+
+	
 });
 
 // Accepts the post request from Slack
