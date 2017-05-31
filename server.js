@@ -76,8 +76,13 @@ Router.post('/lunch_tables', function(req, res) {  
 Router.post('/edit', function(req, res) {  	
 	console.log(users);	
 	console.log(req.body.text);
-	console.log(req.body.user_id);
-	console.log(req.body.response_url);
+	if(req.body.command === '/add_lunch_guest'){
+		users.push(req.body.text);
+	}
+	
+
+	// console.log(req.body.user_id);
+	// console.log(req.body.response_url);
 	res.sendFile(Path.join(__dirname,'README.md'));	
 });
 
