@@ -1,4 +1,5 @@
 var Express = require('express'),
+	BodyParser = require('body-parser'),
 	App = Express(),
 	Path = require('path'),
 	Request = require('request'),
@@ -6,6 +7,9 @@ var Express = require('express'),
 	Router = Express.Router(),
 	authTokens = require('./authentication'),
 	users = require('./users');
+
+App.use(BodyParser.json());
+App.use(BodyParser.urlencoded({ extended: true })); 
 
 // Creates the slack button using authentication tokens
 var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='
