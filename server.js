@@ -189,22 +189,23 @@ Router.post('/generate', function(req, res) {
 			}
 		}
 		
-		
+		var generateString ='{"text":"Lunch Tables", "attachments": [';
 		for(table in tables){
-			var generateString ='{"text":"Lunch Tables", "attachments": [';
+			
 			for(name in tables[table]){
 			
 				generateString+='{"text":"'+name+': ';
 				generateString+=tables[table][name];
 				generateString+='"}';
 
-				if(name == tables[table].length-1){
+				if(table == tables[table].length-1){
 					generateString+=',';
 				}
 			}
-			generateString+=']} ';
+			
 		}	
-		
+		generateString+=']} ';
+	
 		Request.post({
 		  headers: {'Content-type': 'application/json'},
 		  url:     req.body.response_url,

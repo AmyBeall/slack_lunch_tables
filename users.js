@@ -15,7 +15,6 @@ module.exports=[
 "Barber",
 "Sharon",
 "Hubbard",
-"Lauren",
 "Bishop",
 "Levi",
 "Hart",
