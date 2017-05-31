@@ -6,7 +6,7 @@ var Express = require('express'),
 	Router = Express.Router(),
 	authTokens = require('./authentication');
 
-var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='+authTokens.client_id+'&redirect_uri=https://temp.amybeall/authenticate"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
+var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='+authTokens.client_id+'&redirect_uri=https://temp.amybeall.com/authenticate"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
 
 FS.writeFile(Path.join(__dirname,'button.html'), button, function(err) {
     if(err) {
