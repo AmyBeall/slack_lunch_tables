@@ -143,7 +143,13 @@ Router.post('/generate', function(req, res) {
 		numGroups = Math.floor(lengthUsers/smallestGroup),
 		remainder = lengthUsers%smallestGroup,
 		tables = [],
-		table = {};
+		table = {},
+		usersList = [];
+
+		var shuffleList = shuffleArray(users);
+
+		// copy the shuffled user array;
+		listUsers.push.apply(listUsers, shuffleUsers);
 
 		if(lengthUsers <= 5){
 
@@ -153,8 +159,6 @@ Router.post('/generate', function(req, res) {
 			
 		} else if(lengthUsers > 5){
 			var i;
-
-			shuffleArray(users);
 
 			if (remainder === 0){
 			
@@ -167,18 +171,7 @@ Router.post('/generate', function(req, res) {
 					table['Table'+tableNum] = userGroup;
 					tables.push(table);
 				}
-			} else if (remainder === numGroups){
-		
-				for(i = 0; i < remainder; i++){
-
-					var tableNum = i+1,
-						userGroup = users.splice(0, smallestGroup+1),
-						table = {};
-
-					table['Table'+tableNum] = userGroup;
-					tables.push(table);
-				}
-			} else if(remainder < numGroups){
+			} else {
 				
 				for(i = 0; i < numGroups; i++){
 					tableNum = i+1;
