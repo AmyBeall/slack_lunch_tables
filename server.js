@@ -142,7 +142,8 @@ Router.post('/generate', function(req, res) {
 		smallestGroup = 4,
 		numGroups = Math.floor(lengthUsers/smallestGroup),
 		remainder = lengthUsers%smallestGroup,
-		tables = [];
+		tables = [],
+		table = {};
 
 		if(lengthUsers <= 5){
 
@@ -180,8 +181,7 @@ Router.post('/generate', function(req, res) {
 			} else if(remainder < numGroups){
 				
 				for(i = 0; i < numGroups; i++){
-					tableNum = i+1,
-						table = {};
+					tableNum = i+1;
 					
 					if(i < remainder){
 						
@@ -196,32 +196,37 @@ Router.post('/generate', function(req, res) {
 				}
 			}
 		}
+		var generateString ='{"text":"Lunch Tables", "attachments": [';
+
 		for(table in tables){
+			
 			for(name in tables[table]){
-				var generateString='',
-				length = tables[table][name].length;
-
-				generateString+='{"text":"'+name+'", "attachments": [{"text":"';
-
+				
+				var length = tables[table][name].length;
+				generateString+='{"text":"'+name+': ';
 				generateString+=tables[table][name];
 
 				if(name == length){
 					generateString+=", ";
 				}
 			}
-			generateString+='"}]} ';
-			
-			Request.post({
-			  headers: {'Content-type': 'application/json'},
-			  url:     req.body.response_url,
-			  body:   generateString
-			}, function(error, response, body){
-				if(error)console.log(error);
-				if(response)console.log(response);
-			  	if(body)console.log(body);
-			});
-			res.status(200).send('Success!');
+			generateString+='"}';
+			if(table != tables.length-1){
+				generateString+=',';
+			}
 		}	
+		generateString+=']} ';
+		console.log(generateString);
+		// Request.post({
+		//   headers: {'Content-type': 'application/json'},
+		//   url:     req.body.response_url,
+		//   body:   generateString
+		// }, function(error, response, body){
+		// 	if(error)console.log(error);
+		// 	if(response)console.log(response);
+		//   	if(body)console.log(body);
+		// });
+		// res.status(200).send('Success!');
 
 	function shuffleArray(array) {
 	    for (var i = array.length - 1; i > 0; i--) {
