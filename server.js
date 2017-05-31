@@ -79,7 +79,16 @@ Router.post('/edit', function(req, res) {  
 	if(req.body.command === '/add_lunch_guest'){
 		users.push(req.body.text);
 	}
-	
+
+	var usersFile="module.exports="+users;
+
+	FS.writeFile(Path.join(__dirname,'users.js'), usersFile, function(err) {
+	    if(err) {
+	        return console.log(err);
+	    }
+
+	    console.log("New User Added!"); 
+	});
 
 	// console.log(req.body.user_id);
 	// console.log(req.body.response_url);
