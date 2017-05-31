@@ -149,7 +149,7 @@ Router.post('/generate', function(req, res) {
 		var shuffleList = shuffleArray(users);
 
 		// copy the shuffled user array;
-		usersList.push.apply(usersList, shuffleUsers);
+		usersList.push.apply(usersList, shuffleList);
 
 		if(lengthUsers <= 5){
 
@@ -202,10 +202,10 @@ Router.post('/generate', function(req, res) {
 				if(name == length){
 					generateString+=", ";
 				}
-			}
-			generateString+='"}';
-			if(table != tables.length-1){
-				generateString+=',';
+				generateString+='"}';
+				if(table != tables[table].length-1){
+					generateString+=',';
+				}
 			}
 		}	
 		generateString+=']} ';
