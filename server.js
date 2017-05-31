@@ -175,7 +175,8 @@ Router.post('/generate', function(req, res) {
 				for(i = 0; i < usersList.length; i++){
 					var tableNum = i+1,
 					table = {};
-					
+
+					// add remainders to groups
 					if(i < remainder){
 						
 						var userGroup = usersList.splice(0, smallestGroup+1);
@@ -189,7 +190,8 @@ Router.post('/generate', function(req, res) {
 				}
 			}
 		}
-		console.log(tables);
+		
+		// format string to send to slack
 		var generateString ='{"text":"Lunch Tables", "attachments": [';
 		for(table in tables){
 			
