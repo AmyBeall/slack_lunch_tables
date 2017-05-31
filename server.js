@@ -155,7 +155,6 @@ Router.post('/generate', function(req, res) {
 
 			table['Table1'] = users;
 			tables.push(table);
-			console.log(tables);
 			
 		} else if(lengthUsers > 5){
 			var i;
@@ -189,26 +188,22 @@ Router.post('/generate', function(req, res) {
 				}
 			}
 		}
-		var generateString ='{"text":"Lunch Tables", "attachments": [';
-
+		
+		
 		for(table in tables){
-			
+			var generateString ='{"text":"Lunch Tables", "attachments": [';
 			for(name in tables[table]){
-				
-				var length = tables[table][name].length;
+			
 				generateString+='{"text":"'+name+': ';
 				generateString+=tables[table][name];
-
-				if(name == length){
-					generateString+=", ";
-				}
 				generateString+='"}';
-				if(table != tables[table].length-1){
+
+				if(name == tables[table].length-1){
 					generateString+=',';
 				}
 			}
+			generateString+=']} ';
 		}	
-		generateString+=']} ';
 		
 		Request.post({
 		  headers: {'Content-type': 'application/json'},
