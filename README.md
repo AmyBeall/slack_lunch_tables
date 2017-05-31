@@ -1,4 +1,9 @@
 # slack_lunch_tables
+
+https://slack.com/oauth/authorize?&client_id=8985585440.183772429424&scope=incoming-webhook,commands
+
+https://temp.amybeall.com/authenticate
+
 Use slack to interface with app
 
 /configure channel hooks
@@ -10,7 +15,7 @@ reg channel
 /lunch_tables [all_names]
 /lunch_tables [all_tables]
 
-admin channel
+user channel
 /lunch_tables [delete_name]
 /lunch_tables [add_name]
 /lunch_tables [generate]
@@ -41,7 +46,3 @@ node server.js prompt
 node server.js generate
 
 node server.js log
-
-node server.js initialize
-
-node server.js authorize

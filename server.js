@@ -31,7 +31,19 @@ App.get('/authenticate', function(req, res) {
                             return console.log(err);
                         }
 
-                        console.log("The file was saved!");
+                        var teamAuth = FS.readFileSync("team_auth.json");
+                        var teamAuthCreds = JSON.parse(teamAuth);
+
+                        Request.post({
+                          headers: {'Content-type': 'application/json'},
+                          url:     teamAuthCreds.incoming_webhook.url,
+                          body:   '{"text":"Welcome to Lunch Tables!"}'
+                        }, function(error, response, body){
+                        	if(error)console.log(error);
+                        	if(response)console.log(response);
+                          	if(body)console.log(body);
+                        });
+
                         res.sendFile(Path.join(__dirname,'README.md'));
                     });
                 }
