@@ -80,7 +80,12 @@ Router.post('/edit', function(req, res) {  
 		users.push(req.body.text);
 	}
 
-	var usersFile="module.exports="+users;
+	var usersFile="module.exports=[";
+
+	for(user in users){
+		usersFile+='"'+user+'"';
+	}
+	usersFile+="];";
 
 	FS.writeFile(Path.join(__dirname,'users.js'), usersFile, function(err) {
 	    if(err) {
