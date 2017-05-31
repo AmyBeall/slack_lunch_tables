@@ -28,8 +28,15 @@ Clone from github
 
 run NPM install
 
-Edit authentication.js file with values from Slack
-	BaseURL/authenticate
+Add authentication.js file with values from Slack
+	module.exports = {
+	client_id: "",
+	client_secret: "",
+	scope: "incoming-webhook,commands",
+	validation_token: "",
+	redirect_uri:"BaseURL/authenticate"
+}
+Add auth_team.js file with empty object
 
 --- On Slack ---
 Configure all /slash commands listed above
