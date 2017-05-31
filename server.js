@@ -103,9 +103,10 @@ Router.post('/edit', function(req, res) {  
 		  	if(body)console.log(body);
 		});
 		res.status(200).send('Success!');
+
 	} else if(req.body.command === '/delete_lunch_guest'){
 		
-		var index = users.indexOf('req.body.text');
+		var index = users.indexOf(req.body.text);
 		users.splice(index, 1);
 
 		var usersFile="module.exports=[";
@@ -135,8 +136,99 @@ Router.post('/edit', function(req, res) {  
 });
 
 //The endpoint used for generating a new list
-Router.post('/generate', function(req, res) {  		
-	console.log(req);	
+Router.get('/generate', function(req, res) {  
+	var teamAuth = FS.readFileSync("team_auth.json");
+	var teamAuthCreds = JSON.parse(teamAuth);
+
+	var lengthUsers = users.length,
+		smallestGroup = 4,
+		numGroups = Math.floor(lengthUsers/smallestGroup),
+		remainder = lengthUsers%smallestGroup,
+		tables = [],
+		table = {};
+
+		if(lengthUsers <= 5){
+
+			table['Table1'] = users;
+			tables.push(table);
+			console.log(tables);
+			
+		} else if(lengthUsers > 5){
+			var i;
+
+			shuffleArray(users);
+
+			if (remainder === 0){
+			
+				for(i = 0; i < numGroups; i++){
+
+					var tableNum = i+1,
+						userGroup = users.splice(0, smallestGroup);
+
+					table['Table'+tableNum] = userGroup;
+					tables.push(table);
+				}
+			} else if (remainder === numGroups){
+		
+				for(i = 0; i < remainder; i++){
+
+					var tableNum = i+1,
+						userGroup = users.splice(0, smallestGroup+1);
+
+					table['Table'+tableNum] = userGroup;
+					tables.push(table);
+				}
+			} else if(remainder < numGroups){
+				
+				for(i = 0; i < numGroups; i++){
+					tableNum = i+1;
+					
+					if(i < remainder){
+						
+						var userGroup = users.splice(0, smallestGroup+1);
+					} else {
+						
+						var userGroup = users.splice(0, smallestGroup);
+					}
+					
+					table['Table'+tableNum] = userGroup;
+					tables.push(table);
+				}
+			}
+		}
+		for(table in tables){
+			var generateString='{"text":'+table+'", "attachments": [{"text":';
+			var length = tables[table].length;
+			for(name in tables[table]){
+
+				generateString+=name;
+
+				if(name != length){
+					generateString+=",";
+				}
+			}
+			generateString+='"}]} ';
+		}	
+		Request.post({
+		  headers: {'Content-type': 'application/json'},
+		  url:     req.body.response_url,
+		  body:   generateString
+		}, function(error, response, body){
+			if(error)console.log(error);
+			if(response)console.log(response);
+		  	if(body)console.log(body);
+		});
+		res.status(200).send('Success!');
+
+	function shuffleArray(array) {
+	    for (var i = array.length - 1; i > 0; i--) {
+	        var j = Math.floor(Math.random() * (i + 1));
+	        var temp = array[i];
+	        array[i] = array[j];
+	        array[j] = temp;
+	    }
+	    return array;
+	}
 });
 
 // apply the routes to our application

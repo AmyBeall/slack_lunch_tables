@@ -34,16 +34,6 @@
 /lunch_tables [generate]
 	URL used: BaseURL/generate
 	
-<-- Additional logic -->
-
-if (current_time btw 11-2 ){
-	If (new user is added || deleted){
-		regenerate list
-	}
-	if(list regenerated){
-		alert reg channel new list has been created
-	}
-}	
 
 <-- To deploy a single instance -->
 
