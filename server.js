@@ -4,8 +4,10 @@ var Express = require('express'),
 	Request = require('request'),
 	FS = require('fs'),
 	Router = Express.Router(),
-	authTokens = require('./authentication');
+	authTokens = require('./authentication'),
+	users = require('./users');
 
+// Creates the slack button using authentication tokens
 var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='
 +authTokens.client_id+'&redirect_uri='+authTokens.redirect_uri+'"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
 
@@ -14,10 +16,10 @@ FS.writeFile(Path.join(__dirname,'button.html'), button, function(err) {
         return console.log(err);
     }
 
-    console.log("Button Created!");
-    
+    console.log("Button Created!"); 
 });
 
+// The endpoint used for authentication - should only be required once
 App.get('/authenticate', function(req, res) {
 
 	if(req.query.code){
@@ -54,19 +56,34 @@ App.get('/authenticate', function(req, res) {
     }	
 });
 
+// The index of the site leads to the README for information
 App.get('/', function(req, res) {
 	res.sendFile(Path.join(__dirname,'README.md'));
 });
 
 // Accepts the post request from Slack
+
+// The main endpoint that handles most GET requests
 Router.post('/lunch_tables', function(req, res) {  		
+	console.log(req);	
+});
+
+// The endpoint used for editing the list of names
+Router.post('/edit', function(req, res) {  	
+	console.log(users);	
+	console.log(req.body.text);
+	console.log(req.body.user_id);
+	console.log(req.body.response_url);
+	res.sendFile(Path.join(__dirname,'README.md'));	
+});
+
+//The endpoint used for generating a new list
+Router.post('/generate', function(req, res) {  		
 	console.log(req);	
 });
 
 // apply the routes to our application
 App.use('/', Router);
-
-
 
 App.listen(8080, "");
 console.log('Server running at http://172.31.13.193:8080/');

@@ -1,31 +1,40 @@
 # slack_lunch_tables
 
-https://slack.com/oauth/authorize?&client_id=8985585440.183772429424&scope=incoming-webhook,commands
+<-- Authenticate using one of the following methods -->
 
-https://temp.amybeall.com/authenticate
+	The user that downloads that authenticates becomes the user validated to edit the list generation
+	
+	https://slack.com/oauth/authorize?&client_id=8985585440.183772429424&scope=incoming-webhook,commands
 
-Use slack to interface with app
+	https://temp.amybeall.com/authenticate
 
-/configure channel hooks
+<-- Use slack to interface with app -->
 
-reg channel
+/slash commands configured:
+
+*channel validated
+
 /lunch_tables [all]
+	URL used: BaseURL/lunch_tables
 /lunch_tables [name]
+	URL used: BaseURL/lunch_tables
 /lunch_tables [table]
+	URL used: BaseURL/lunch_tables
 /lunch_tables [all_names]
+	URL used: BaseURL/lunch_tables
 /lunch_tables [all_tables]
+	URL used: BaseURL/lunch_tables
 
-user channel
+*user validated
+
 /lunch_tables [delete_name]
+	URL used: BaseURL/edit
 /lunch_tables [add_name]
+	URL used: BaseURL/edit
 /lunch_tables [generate]
-/lunch_tables [log]
-
-10am prompt admin to add/delete users
-
-11am cron generates list
-
-2pm cron generates log of lunch groups
+	URL used: BaseURL/generate
+	
+<-- Additional logic -->
 
 if (current_time btw 11-2 ){
 	If (new user is added || deleted){
@@ -36,13 +45,16 @@ if (current_time btw 11-2 ){
 	}
 }	
 
-file 1 = array of names
-file 2 = temporary table objects
+<-- To deploy a single instance -->
 
-CLI commands for cron jobs
+Clone from github
 
-node server.js prompt
+run NPM install
 
-node server.js generate
+Edit authentication.js file with values from Slack
 
-node server.js log
+Configure all /slash commands listed above
+
+Add an incoming webhook	
+
+Use one of the authentication URLs
