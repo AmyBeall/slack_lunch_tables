@@ -6,7 +6,8 @@ var Express = require('express'),
 	Router = Express.Router(),
 	authTokens = require('./authentication');
 
-var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='+authTokens.client_id+'&redirect_uri=https://temp.amybeall.com/authenticate"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
+var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='
++authTokens.client_id+'&redirect_uri='+authTokens.redirect_uri+'"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
 
 FS.writeFile(Path.join(__dirname,'button.html'), button, function(err) {
     if(err) {
@@ -21,7 +22,7 @@ App.get('/authenticate', function(req, res) {
 
 	if(req.query.code){
         var authCode = req.query.code;
-        Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode, function(error, response, body){
+        Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode+'&redirect_uri='+authTokens.redirect_uri, function(error, response, body){
                 if(error)console.log(error);
                 if(response)console.log(response);
                 if(body){
@@ -35,9 +36,10 @@ App.get('/authenticate', function(req, res) {
                     });
                 }
         });
-    }
-    
-    res.sendFile(Path.join(__dirname,'button.html'));
+    } else {
+    	
+    	res.sendFile(Path.join(__dirname,'button.html'));
+    }	
 });
 
 App.get('/', function(req, res) {
