@@ -136,16 +136,13 @@ Router.post('/edit', function(req, res) {  
 });
 
 //The endpoint used for generating a new list
-Router.get('/generate', function(req, res) {  
-	var teamAuth = FS.readFileSync("team_auth.json");
-	var teamAuthCreds = JSON.parse(teamAuth);
+Router.post('/generate', function(req, res) { 
 
 	var lengthUsers = users.length,
 		smallestGroup = 4,
 		numGroups = Math.floor(lengthUsers/smallestGroup),
 		remainder = lengthUsers%smallestGroup,
-		tables = [],
-		table = {};
+		tables = [];
 
 		if(lengthUsers <= 5){
 
@@ -163,7 +160,8 @@ Router.get('/generate', function(req, res) {  
 				for(i = 0; i < numGroups; i++){
 
 					var tableNum = i+1,
-						userGroup = users.splice(0, smallestGroup);
+						userGroup = users.splice(0, smallestGroup),
+						table = {};
 
 					table['Table'+tableNum] = userGroup;
 					tables.push(table);
@@ -173,7 +171,8 @@ Router.get('/generate', function(req, res) {  
 				for(i = 0; i < remainder; i++){
 
 					var tableNum = i+1,
-						userGroup = users.splice(0, smallestGroup+1);
+						userGroup = users.splice(0, smallestGroup+1),
+						table = {};
 
 					table['Table'+tableNum] = userGroup;
 					tables.push(table);
@@ -181,7 +180,8 @@ Router.get('/generate', function(req, res) {  
 			} else if(remainder < numGroups){
 				
 				for(i = 0; i < numGroups; i++){
-					tableNum = i+1;
+					tableNum = i+1,
+						table = {};
 					
 					if(i < remainder){
 						
@@ -197,28 +197,31 @@ Router.get('/generate', function(req, res) {  
 			}
 		}
 		for(table in tables){
-			var generateString='{"text":'+table+'", "attachments": [{"text":';
-			var length = tables[table].length;
 			for(name in tables[table]){
+				var generateString='',
+				length = tables[table][name].length;
 
-				generateString+=name;
+				generateString+='{"text":"'+name+'", "attachments": [{"text":"';
 
-				if(name != length){
-					generateString+=",";
+				generateString+=tables[table][name];
+
+				if(name == length){
+					generateString+=", ";
 				}
 			}
 			generateString+='"}]} ';
+			
+			Request.post({
+			  headers: {'Content-type': 'application/json'},
+			  url:     req.body.response_url,
+			  body:   generateString
+			}, function(error, response, body){
+				if(error)console.log(error);
+				if(response)console.log(response);
+			  	if(body)console.log(body);
+			});
+			res.status(200).send('Success!');
 		}	
-		Request.post({
-		  headers: {'Content-type': 'application/json'},
-		  url:     req.body.response_url,
-		  body:   generateString
-		}, function(error, response, body){
-			if(error)console.log(error);
-			if(response)console.log(response);
-		  	if(body)console.log(body);
-		});
-		res.status(200).send('Success!');
 
 	function shuffleArray(array) {
 	    for (var i = array.length - 1; i > 0; i--) {
