@@ -1,5 +1,7 @@
 module.exports=[
 	"Amy",
 	"Shirley",
-	"John"
+	"John",
+	"Raul",
+	"Debra"
 ]

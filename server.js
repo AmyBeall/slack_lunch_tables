@@ -102,7 +102,35 @@ Router.post('/edit', function(req, res) {  
 			if(response)console.log(response);
 		  	if(body)console.log(body);
 		});
-		res.status(200).send('Looking Good!');
+		res.status(200).send('Success!');
+	} else if(req.body.command === '/delete_lunch_guest'){
+		
+		var index = users.indexOf('req.body.text');
+		users.splice(index, 1);
+
+		var usersFile="module.exports=[";
+
+		for(user in users){
+			usersFile+='"'+users[user]+'"';
+			if(user != users.length-1)usersFile+=',';
+		}
+		usersFile+="];";
+
+		FS.writeFile(Path.join(__dirname,'users.js'), usersFile, function(err) {
+		    if(err) {
+		        return console.log(err);
+		    }
+		});
+		Request.post({
+		  headers: {'Content-type': 'application/json'},
+		  url:     req.body.response_url,
+		  body:   '{"text":"'+req.body.text+' has been removed"}'
+		}, function(error, response, body){
+			if(error)console.log(error);
+			if(response)console.log(response);
+		  	if(body)console.log(body);
+		});
+		res.status(200).send('Success!');
 	}
 });
 
