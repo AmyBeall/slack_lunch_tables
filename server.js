@@ -83,7 +83,8 @@ Router.post('/edit', function(req, res) {  
 		var usersFile="module.exports=[";
 
 		for(user in users){
-			usersFile+='"'+users[user]+'",';
+			usersFile+='"'+users[user]+'"';
+			if(user != users.length-1)usersFile+=',';
 		}
 		usersFile+="];";
 
