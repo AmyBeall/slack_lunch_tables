@@ -18,5 +18,8 @@ module.exports=[
 "Bishop",
 "Levi",
 "Hart",
-"Amy"
+"Amy",
+"Jimmy",
+"Johnny",
+"Jennifer"
 ]

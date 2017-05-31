@@ -171,9 +171,10 @@ Router.post('/generate', function(req, res) {
 					tables.push(table);
 				}
 			} else {
-				
-				for(i = 0; i < numGroups; i++){
-					tableNum = i+1;
+
+				for(i = 0; i < usersList.length; i++){
+					var tableNum = i+1,
+					table = {};
 					
 					if(i < remainder){
 						
@@ -188,7 +189,7 @@ Router.post('/generate', function(req, res) {
 				}
 			}
 		}
-		
+		console.log(tables);
 		var generateString ='{"text":"Lunch Tables", "attachments": [';
 		for(table in tables){
 			
@@ -198,14 +199,14 @@ Router.post('/generate', function(req, res) {
 				generateString+=tables[table][name];
 				generateString+='"}';
 
-				if(table == tables[table].length-1){
+				if(table != tables.length-1){
 					generateString+=',';
 				}
 			}
 			
 		}	
 		generateString+=']} ';
-	
+		
 		Request.post({
 		  headers: {'Content-type': 'application/json'},
 		  url:     req.body.response_url,
