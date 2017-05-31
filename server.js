@@ -216,17 +216,17 @@ Router.post('/generate', function(req, res) {
 			}
 		}	
 		generateString+=']} ';
-		console.log(generateString);
-		// Request.post({
-		//   headers: {'Content-type': 'application/json'},
-		//   url:     req.body.response_url,
-		//   body:   generateString
-		// }, function(error, response, body){
-		// 	if(error)console.log(error);
-		// 	if(response)console.log(response);
-		//   	if(body)console.log(body);
-		// });
-		// res.status(200).send('Success!');
+		
+		Request.post({
+		  headers: {'Content-type': 'application/json'},
+		  url:     req.body.response_url,
+		  body:   generateString
+		}, function(error, response, body){
+			if(error)console.log(error);
+			if(response)console.log(response);
+		  	if(body)console.log(body);
+		});
+		res.status(200).send('Success!');
 
 	function shuffleArray(array) {
 	    for (var i = array.length - 1; i > 0; i--) {
