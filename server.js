@@ -3,36 +3,45 @@ var Express = require('express'),
 	Path = require('path'),
 	Request = require('request'),
 	FS = require('fs'),
-	Router = Express.Router(); 
+	Router = Express.Router(),
+	authTokens = require('./authentication');
 
-var authTokens = require('./authentication');
+var button = '<html> <a href="https://slack.com/oauth/authorize?scope='+authTokens.scope+'&client_id='+authTokens.client_id+'&redirect_uri=https://temp.amybeall/authenticate"><img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" /></a> </html>';
 
-Request.get('https://slack.com/oauth/authorize?client_id='+authTokens.client_id+'&scope='+authTokens.scope, function(error){
-	if(error)console.log(error);
+FS.writeFile(Path.join(__dirname,'button.html'), button, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+
+    console.log("Button Created!");
+    
 });
-App.get('/', function(req, res) {
-	console.log(req.query);
-	console.log(req.query.code);
+
+App.get('/authenticate', function(req, res) {
+
 	if(req.query.code){
-		var authCode = req.query.code;
-		Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode, function(error, response, body){
-			if(error)console.log(error);
-			if(response)console.log(response);
-			if(body){
-	  		FS.writeFile(Path.join(__dirname,'index.html'), body, function(err) {
-				    if(err) {
-				        return console.log(err);
-				    }
+        var authCode = req.query.code;
+        Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode, function(error, response, body){
+                if(error)console.log(error);
+                if(response)console.log(response);
+                if(body){
+                	FS.writeFile(Path.join(__dirname,'team_auth.json'), body, function(err) {
+                        if(err) {
+                            return console.log(err);
+                        }
 
-				    console.log("The file was saved!");
-				}); 
-	  		}
-		});
-	} 
+                        console.log("The file was saved!");
+                        res.sendFile(Path.join(__dirname,'README.md'));
+                    });
+                }
+        });
+    }
+    
+    res.sendFile(Path.join(__dirname,'button.html'));
+});
 
-	res.sendFile(Path.join(__dirname,'index.html'));
-
-	
+App.get('/', function(req, res) {
+	res.sendFile(Path.join(__dirname,'README.md'));
 });
 
 // Accepts the post request from Slack
