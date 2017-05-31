@@ -27,6 +27,7 @@ FS.writeFile(Path.join(__dirname,'button.html'), button, function(err) {
 App.get('/authenticate', function(req, res) {
 
 	if(req.query.code){
+
         var authCode = req.query.code;
         Request.get('https://slack.com/api/oauth.access?client_id='+authTokens.client_id+'&client_secret='+authTokens.client_secret+'&code='+authCode+'&redirect_uri='+authTokens.redirect_uri, function(error, response, body){
                 if(error)console.log(error);
@@ -74,30 +75,34 @@ Router.post('/lunch_tables', function(req, res) {  
 
 // The endpoint used for editing the list of names
 Router.post('/edit', function(req, res) {  	
-	console.log(users);	
-	console.log(req.body.text);
+	
 	if(req.body.command === '/add_lunch_guest'){
 		users.push(req.body.text);
+	
+
+		var usersFile="module.exports=[";
+
+		for(user in users){
+			usersFile+='"'+users[user]+'",';
+		}
+		usersFile+="];";
+
+		FS.writeFile(Path.join(__dirname,'users.js'), usersFile, function(err) {
+		    if(err) {
+		        return console.log(err);
+		    }
+		});
+		Request.post({
+		  headers: {'Content-type': 'application/json'},
+		  url:     req.body.response_url,
+		  body:   '{"text":"'+req.body.text+' has been added"}'
+		}, function(error, response, body){
+			if(error)console.log(error);
+			if(response)console.log(response);
+		  	if(body)console.log(body);
+		});
+		res.status(200).send('Looking Good!');
 	}
-
-	var usersFile="module.exports=[";
-
-	for(user in users){
-		usersFile+='"'+user+'"';
-	}
-	usersFile+="];";
-
-	FS.writeFile(Path.join(__dirname,'users.js'), usersFile, function(err) {
-	    if(err) {
-	        return console.log(err);
-	    }
-
-	    console.log("New User Added!"); 
-	});
-
-	// console.log(req.body.user_id);
-	// console.log(req.body.response_url);
-	res.sendFile(Path.join(__dirname,'README.md'));	
 });
 
 //The endpoint used for generating a new list
